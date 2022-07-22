@@ -1,53 +1,50 @@
-import React, {useEffect, useState} from 'react';
-import { Container, Card, Button } from 'react-bootstrap';
-// import CartItem from '../components/CartItem';
-import { Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Button, Card, Container } from 'react-bootstrap';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { getBaseUrl } from '../utils';
 
-function Profile({isLogedIn, setIsLogedIn}) {
-	const [name, setName] = useState('');
-	const [email, setEmail] = useState('');
-	const navigate = useNavigate();
+function Profile({ isLogedIn, setIsLogedIn }) {
 
-	useEffect (() => {
-		const token = localStorage.getItem('eshop_jwt');
-		axios.get('https://eshop.reskimulud.my.id/user', {
-			headers: {
-				'authorization': `Bearer ${token}`,
-			},
-		}).then((res) => {
-			console.log(res);
-			setName(res.data.data.user.name);
-			setEmail(res.data.data.user.email);
-		});
-	}, []);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
 
-	if (!isLogedIn) {
-		return (
-			<Navigate to ='/auth/login' replace />
-		);
-	}
+  const navigate = useNavigate();
+  const token = localStorage.getItem('eshop_jwt');
 
-	const onLogout = (e) => {
-		localStorage.clear();
-		setIsLogedIn(false);
-		navigate('/auth/login');
-	};
+  useEffect(() => {
+    axios.get(`https://eshop.reskimulud.my.id/products${getBaseUrl()}/user`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    }).then(res => {
+      const { name, email } = res.data.data.user;
+      setName(name);
+      setEmail(email);
+    }).catch(err => alert(err.response.data.message))
+  }, [token])
 
-	return (
-		<Container>
-			<Card className ='m-3 p-3'>
-				<Card.Title>Name: {name}</Card.Title>
-				<Card.Subtitle>Email: {email}</Card.Subtitle>
-				<Button onClick={onLogout} variant='danger'>Logout</Button>
-			</Card>
-		</Container>
-	);
+  if (!isLogedIn) {
+    return <Navigate to='/auth/login' replace />
+  }
 
+
+  const logout = () => {
+    localStorage.clear();
+    setIsLogedIn(false);
+    navigate('/auth/login');
+  };
+
+  return (
+    <Container>
+      <h1>Profile</h1>
+      <Card className='p-3'>
+        <Card.Title className='my-2'>{name}</Card.Title>
+        <Card.Subtitle className='my-2'>{email}</Card.Subtitle>
+        <Button className='btn btn-danger my-2' onClick={logout}>Logout</Button>
+      </Card>
+    </Container>
+  );
 }
 
-
-
 export default Profile;
-
-
