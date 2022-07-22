@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Auth from './pages/Auth';
@@ -10,6 +10,14 @@ import Profile from './pages/Profile';
 function App() {
  const [isLogedIn, setIsLogedIn] = useState(false);
 
+ useEffect(() => {
+  const token = localStorage.getItem('eshop_jwt');
+    if (token) {
+      setIsLogedIn(true);
+    }
+
+ }, []);
+
   return (
    
       <Router>
@@ -19,11 +27,11 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
 
-          <Route path='/auth/login' element={<Auth login />} />
-          <Route path='/auth/register' element={<Auth register />} />
+          <Route path='/auth/login' element={<Auth isLogedIn={isLogedIn} login setIsLogedIn={setIsLogedIn} />} />
+          <Route path='/auth/register' element={<Auth isLogedIn={isLogedIn} register />} />
 
           <Route path='/carts' element={<Carts isLogedIn={isLogedIn} />} />
-          <Route path='/profile' element={<Profile isLogedIn={isLogedIn} />} />
+          <Route path='/profile' element={<Profile setIsLogedIn={setIsLogedIn} isLogedIn={isLogedIn} />} />
         </Routes>
       </Router>
   );

@@ -13,7 +13,7 @@ const imageStyle = {
 function CardItem({item}){
     return (
         <Card cardName='me-3 mb-3'>
-        <Card.Img style={imageStyle} variant="top" src={item.image} />
+        <Card.Img style={imageStyle} variant="top" src={`https://eshop.reskimulud.my.id/products/image/${item.image}`} />
         <Card.Body>
           <Card.Title>{item.title}</Card.Title>
           <Card.Text>
