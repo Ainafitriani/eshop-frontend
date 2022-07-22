@@ -3,7 +3,7 @@ import { Navbar as NavBar, Container, Nav, Button} from 'react-bootstrap';
 
 import { useNavigate } from 'react-router-dom';
 import {MdShoppingCart, MdPerson} from 'react-icons/md';
-
+import Links from './Links';
 
 function Navbar({isLogedIn}) {
 
@@ -12,7 +12,7 @@ function Navbar({isLogedIn}) {
     const iconCursor = {cursor: 'pointer'};
 
     return(
-        <NavBar>
+        <NavBar className='mb-3' bg="light" expand="lg">
             <Container>
                 <NavBar.Brand>eShop</NavBar.Brand>
                 <Nav>

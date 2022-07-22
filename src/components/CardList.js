@@ -1,26 +1,29 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
+import { getBaseUrl } from '../utils';
 import CardItem from './CardItem';
-import axios from 'axios';
 
+function CardList({isLogedIn}) {
 
+  const [products, setProducts] = useState([]);
+  console.log(getBaseUrl());
 
-function CardList() {
-    const [products, setProducts] = useState([]);
+  useEffect(() => {
+    axios.get('https://eshop.reskimulud.my.id/products').then(res => setProducts(res.data.data.products));
+  }, []);
 
-    useEffect(() => {
-        axios.get('https://eshop.reskimulud.my.id/products') 
-            .then((res) => setProducts(res.data.data.products))
-    }, []);
-return (
-    <Row xs={1} xl={4} sm={2} lg={3} md={3}>
-{products.map((product) => (
-    <Col key={product.id}>
-    <CardItem item={product} />
-    </Col>
-) )}
-    </Row>
-);
+  return (
+    <div>
+      <Row xs={1} xl={4} sm={2} lg={3} md={3}>
+        {products.map((product) => (
+          <Col key={product.id} className='mb-4'>
+            <CardItem isLogedIn={isLogedIn} item={product} />
+          </Col>
+        ))}
+      </Row>
+    </div>
+  );
 }
 
 export default CardList;

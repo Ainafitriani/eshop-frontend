@@ -9,23 +9,22 @@ import Profile from './pages/Profile';
 
 function App() {
  const [isLogedIn, setIsLogedIn] = useState(false);
-
- useEffect(() => {
   const token = localStorage.getItem('eshop_jwt');
+ 
+ useEffect(() => {
     if (token) {
       setIsLogedIn(true);
     }
 
- }, []);
+ }, [token]);
 
   return (
    
       <Router>
-
         <Navbar isLogedIn={isLogedIn} />
 
         <Routes>
-          <Route path='/' element={<Home />} />
+          <Route path='/' element={<Home isLogedIn={isLogedIn} />} />
 
           <Route path='/auth/login' element={<Auth isLogedIn={isLogedIn} login setIsLogedIn={setIsLogedIn} />} />
           <Route path='/auth/register' element={<Auth isLogedIn={isLogedIn} register />} />
